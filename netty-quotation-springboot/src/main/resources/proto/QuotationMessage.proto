@@ -1,0 +1,82 @@
+syntax = "proto3"; // 指定protobuf版本
+
+option java_package = "cn.ztuo.bitrade.protobuf"; // 指定包名
+option java_outer_classname = "QuotationMessage"; // 指定生成的类名
+
+message Message {
+
+
+    string ch = 1;
+    int64 ts = 2;
+    string symbol = 3;
+    enum MessageType {
+        KLineType = 0;
+        DepthType = 1;
+        TradeType = 2;
+        MarketType = 3;
+    }
+
+    MessageType messageType = 4;
+
+    oneof tick {
+        KLineData kline = 5;
+        DepthData depth = 6;
+        TradeData trade = 7;
+        MarketData market = 8;
+    }
+
+}
+
+// k先数据
+message KLineData {
+    int64 id = 1;
+    double amount = 2;
+    int64 count = 3;
+    double open = 4;
+    double close = 5;
+    double low = 6;
+    double high = 7;
+    double vol = 8;
+    string type = 9;
+}
+
+// 市场深度行情数据
+message DepthData {
+    repeated DepthTickArray bids = 1;
+    repeated DepthTickArray asks = 2;
+    int64 version = 3;
+    int64 ts = 4;
+}
+
+message DepthTickArray {
+    repeated double tickArray = 1;
+}
+
+// 成交明细
+message TradeData {
+    int64 id = 1;
+    int64 ts = 2;
+    repeated TradeDetailData data = 3;
+}
+
+
+message TradeDetailData {
+    double amount = 1;
+    int64 ts = 2;
+    int64 tradeId = 4;
+    double price = 5;
+    string direction = 6;
+}
+
+// 市场概要
+message MarketData {
+    double amount = 1;
+    double open = 2;
+    double close = 3;
+    double high = 4;
+    int64 id = 6;
+    int64 count = 7;
+    double low = 8;
+    double vol = 9;
+
+}
